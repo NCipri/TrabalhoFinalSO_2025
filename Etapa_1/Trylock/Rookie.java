@@ -26,33 +26,27 @@ public class Rookie implements Runnable {
             int l = rand.nextInt(N);
 
             try {
-                // PASSO 2: pega o pedido (primeiro recurso)
                 System.out.println("[Novato " + id + "]: Tentando pegar pedido do Restaurante " + l + "...");
                 pedidos[l].acquire();
                 System.out.println("[Novato " + id + "]: Peguei o pedido do Restaurante " + l + "!");
 
-                // PASSO 3: caminhada até o estacionamento — janela para o deadlock
                 Thread.sleep(1000);
 
-                // PASSO 4: tenta pegar a moto com timeout
                 System.out.println("[Novato " + id + "]: Aguardando moto do Restaurante " + l + "...");
                 boolean pegouMoto = motos[l].tryAcquire(2, TimeUnit.SECONDS);
 
                 if (!pegouMoto) {
-                    // DEADLOCK DETECTADO — solta o pedido e recomeça
                     System.out.println("[Novato " + id + "]: ⚠️  DEADLOCK DETECTADO! Soltando pedido do Restaurante " + l + " e recomeçando...");
                     pedidos[l].release();
-                    Thread.sleep(500); // pequena pausa antes de tentar de novo
-                    continue;         // volta ao início do while
+                    Thread.sleep(500); 
+                    continue;         
                 }
 
                 System.out.println("[Novato " + id + "]: Peguei a chave da moto do Restaurante " + l + "!");
 
-                // PASSO 5: faz a entrega
                 System.out.println("[Novato " + id + "]: Realizando entrega do Restaurante " + l + "...");
                 Thread.sleep(1500);
 
-                // PASSO 6 e 7: libera na ordem inversa
                 motos[l].release();
                 pedidos[l].release();
                 System.out.println("[Novato " + id + "]: Entrega do Restaurante " + l + " concluída!");
