@@ -29,7 +29,6 @@ public class Main {
             pedidos[l] = new Semaphore(1);
         }
 
-        // cria os arrays de threads
         Thread[] seniorThreads = new Thread[nSeniors];
         Thread[] rookieThreads = new Thread[nRookies];
 
